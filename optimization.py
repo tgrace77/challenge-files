@@ -13,7 +13,7 @@ import torch
 import torch.optim as optim
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
-from utils import softplus_diag, matrix_operations, compute_determinant_approx
+from utils import matrix_operations, compute_determinant_approx
 
 def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D):
     """
