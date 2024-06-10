@@ -29,7 +29,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
     torch.Tensor: Computed loss value.
     """
     x1_positive = compute_positive(x1)
-    x2_positive = compite_positive(x2)
+    x2_positive = compute_positive(x2)
     x3_positive = compute_positive(x3)
     x1_diag = torch.diag(x1_positive)
     E_x_expanded_full, sigma_x1, E_x = matrix_operations(A, E_combined, x1_positive, sigma)
