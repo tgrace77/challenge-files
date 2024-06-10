@@ -43,3 +43,9 @@ def compute_determinant_approx(x):
     """
     u, s, vh = torch.linalg.svd(x, full_matrices=False)
     return torch.prod(s)
+
+
+def compute_positive(x):
+    return torch.nn.functional.softplus(x)
+
+
