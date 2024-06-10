@@ -81,7 +81,7 @@ def generate_sample_data():
     print("E.shape = ", E.shape)
     print("Sigma.shape = ", Sigma.shape)
 
-
+    print("Hello")
     return A, D, E, Sigma
 
     #run your algorithm on A, D, E, Sigma, and w from the previous cell
