@@ -37,6 +37,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
       det_approx = compute_determinant_approx(x3_positive)
     else:
       det_approx = x3_positive
+      
 
     # Regularization terms (adjust or clarify for your loss function)
     log_sum_1 = C1 * torch.log(x1_positive).sum()
