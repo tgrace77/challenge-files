@@ -54,42 +54,42 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
     return (((1 - W) * combined_result) + log_sum_3 + log_sum_4) + ((W * norm_squared_sum) + log_sum_1 + log_sum_2)
 
 def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, known):
-    x1 = torch.randn(x1_size, requires_grad=True)
-    x2 = torch.randn(x1_size)
-    x3 = torch.randn(x1_size)
+  x1 = torch.randn(x1_size, requires_grad=True)
+  x2 = torch.randn(x1_size)
+  x3 = torch.randn(x1_size)
 
-    E_combined = torch.tensor(E, dtype=torch.float32)
-    E_transpose = E_combined.t()
+  E_combined = torch.tensor(E, dtype=torch.float32)
+  E_transpose = E_combined.t()
 
-    A = torch.tensor(A, dtype=torch.float32)
-    Sigma = torch.tensor(Sigma, dtype=torch.float32)
-    D = torch.tensor(D, dtype=torch.float32)
-    optimizer = optim.Adam([x1], lr=0.001)
+  A = torch.tensor(A, dtype=torch.float32)
+  Sigma = torch.tensor(Sigma, dtype=torch.float32)
+  D = torch.tensor(D, dtype=torch.float32)
+  optimizer = optim.Adam([x1], lr=0.001)
 
-    losses = []
-    parameter_changes = []
-    previous_parameters = x1.detach().flatten()
+  losses = []
+  parameter_changes = []
+  previous_parameters = x1.detach().flatten()
 
-    # Optimization loop
-    for i in range(10000):
-        optimizer.zero_grad()
-        loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, Sigma, x3, D, known)
-        C1 = 1 / ((i + 1) ** 2)
-        loss.backward()
-        optimizer.step()
+  # Optimization loop
+  for i in range(10000):
+      optimizer.zero_grad()
+      loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, Sigma, x3, D, known)
+      C1 = 1 / ((i + 1) ** 2)
+      loss.backward()
+      optimizer.step()
 
-        # Store loss
-        losses.append(loss.item())
+      # Store loss
+      losses.append(loss.item())
 
-        # Calculate and store parameter changes for x1 only
-        current_parameters = x1.detach().flatten()
-        param_change = torch.log(torch.norm(current_parameters - previous_parameters))
-        parameter_changes.append(param_change.item())
-        previous_parameters = current_parameters
+      # Calculate and store parameter changes for x1 only
+      current_parameters = x1.detach().flatten()
+      param_change = torch.log(torch.norm(current_parameters - previous_parameters))
+      parameter_changes.append(param_change.item())
+      previous_parameters = current_parameters
 
-        if i % 10 == 0:
-            print(f"Step {i}, Current loss: {loss.item()}")
-        # Plot loss over iterations
+      if i % 10 == 0:
+          print(f"Step {i}, Current loss: {loss.item()}")
+      # Plot loss over iterations
   plt.figure(figsize=(12, 5))
   plt.subplot(1, 2, 1)
   plt.plot(losses, label='Loss')
