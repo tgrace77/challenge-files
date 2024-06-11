@@ -42,7 +42,7 @@ def compute_determinant_approx(x):
     Returns:
     torch.Tensor: Product of singular values, an approximation of the determinant.
     """
-    u, s, vh = torch.linalg.det(x, full_matrices=False)
+    u, s, vh = torch.linalg.svd(x, full_matrices=False)
     return torch.prod(s)
 
 
