@@ -58,7 +58,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma):
   E_combined = E
   E_transpose = E_combined.t()
 
-  optimizer = ooptim.Adam([x1, x2, x3], lr = 0.01)
+  optimizer = optim.Adam([x1, x2, x3], lr = 0.01)
 
   losses = []
   parameter_changes = []
