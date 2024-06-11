@@ -50,6 +50,68 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
 
     return (((1 - W) * combined_result) + log_sum_3 + log_sum_4) + ((W * norm_squared_sum) + log_sum_1 + log_sum_2)
 
+def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma):
+  x1 = torch.randn(x1_size, requires_grad=True)
+  x2 = 0
+  x3 = 0
+
+  E_combined = E
+  E_transpose = E.t()
+
+  optimizer = ooptim.Adam([x1, x2, x3], lr = 0.01)
+
+  losses = []
+  parameter_changes = []
+  previous_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
+
+  # Optimization loop
+  for i in range(1000):
+      optimizer.zero_grad()
+      loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D)
+      C1 = 1 / (1 / ((i +1)**2))
+      loss.backward()
+      optimizer.step()
+
+      # Store loss
+      losses.append(loss.item())
+
+      # Calculate and store parameter changes
+      current_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
+      param_change = torch.log(torch.norm(current_parameters - previous_parameters))
+      parameter_changes.append(param_change.item())
+      previous_parameters = current_parameters
+
+      if i % 10 == 0:
+          print(f"Step {i}, Current loss: {loss.item()}")
+      # Plot loss over iterations
+  plt.figure(figsize=(12, 5))
+  plt.subplot(1, 2, 1)
+  plt.plot(losses, label='Loss')
+  plt.title('Loss Function over Iterations')
+  plt.xlabel('Iteration')
+  plt.ylabel('Loss')
+  plt.legend()
+
+  # Plot parameter changes
+  plt.subplot(1, 2, 2)
+  plt.plot(parameter_changes, label='Log of Parameter Changes')
+  plt.title('Log of Norm of Parameter Changes')
+  plt.xlabel('Iteration')
+  plt.ylabel('Log(Norm of Changes)')
+  plt.legend()
+  plt.show()
+  
+  print("x1 optimized: ")
+  print(x1)
+  
+  print("x2 optimized: ")
+  print(x2) 
+  
+  print("x3 optimized: ")
+  print(x3)
+  
+  pass
+
 def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_Esig, x1_size, A_column, A_row, D_size, E_size, MS_size):
   """
   Performs the gradient descent optimization over specified parameters and hyperparameters.
