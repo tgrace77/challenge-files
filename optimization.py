@@ -37,7 +37,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
       det_approx = compute_determinant_approx(x3_positive)
     else:
       det_approx = x3_positive
-      
+
 
     # Regularization terms (adjust or clarify for your loss function)
     log_sum_1 = C1 * torch.log(x1_positive).sum()
@@ -64,7 +64,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   A = torch.tensor(A, dtype  = torch.float32)
   Sigma = torch.tensor(Sigma, dtype = torch.float32)
   D = torch.tensor(D, dtype = torch.float32)
-  optimizer = optim.Adam([x1, x2, x3], lr = 0.01)
+  optimizer = optim.Adam([x1, x2, x3], lr = 0.001)
 
   losses = []
   parameter_changes = []
