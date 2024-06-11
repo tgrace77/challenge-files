@@ -55,7 +55,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma):
   x2 = 0
   x3 = 0
 
-  E_combined = E
+  E_combined = torch.tensor(E, dtype=torch.float32)
   E_transpose = E_combined.t()
 
   optimizer = optim.Adam([x1, x2, x3], lr = 0.01)
