@@ -55,8 +55,8 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
 
 def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, known):
   x1 = torch.randn(x1_size, requires_grad=True)
-  x2 = torch.randn(x1_size, requires_grad=True)
-  x3 = torch.randn(x1_size, requires_grad=True)
+  x2 = torch.randn(x1_size)
+  x3 = torch.randn(x1_size)
 
   E_combined = torch.tensor(E, dtype=torch.float32)
   E_transpose = E_combined.t()
@@ -64,11 +64,11 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   A = torch.tensor(A, dtype  = torch.float32)
   Sigma = torch.tensor(Sigma, dtype = torch.float32)
   D = torch.tensor(D, dtype = torch.float32)
-  optimizer = optim.Adam([x1, x2, x3], lr = 0.001)
+  optimizer = optim.Adam([x1], lr = 0.01)
 
   losses = []
   parameter_changes = []
-  previous_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
+  previous_parameters = torch.cat((x1.detach().flatten()))
 
   # Optimization loop
   for i in range(10000):
