@@ -12,7 +12,7 @@ Original file is located at
 import torch
 
 
-def matrix_operations(A, E_combined, x1_positive, sigma, known):
+def matrix_operations(A, E_combined, x1_positive, sigma):
     """
     Perform matrix operations used in the optimization computation.
 
