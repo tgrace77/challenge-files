@@ -71,10 +71,10 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   previous_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
 
   # Optimization loop
-  for i in range(1000):
+  for i in range(10000):
       optimizer.zero_grad()
       loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, Sigma, x3, D, known)
-      C1 = 1 / ((i +1 )**2)
+      C1 = 1 / ((i +1).pow(2))
       loss.backward()
       optimizer.step()
 
