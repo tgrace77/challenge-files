@@ -68,7 +68,7 @@ def generate_sample_data():
 
     #for now, just test on the first bulk sample generated above, but start changing this around when your algorithm
     #is working on this dataset
-    A = A_list[0]
+    A = A_list
     A = A.T.flatten().T
     D = D_list[0]
 
