@@ -12,7 +12,7 @@ Original file is located at
 import torch
 
 
-def matrix_operations(A, E_combined, x1_positive, sigma):
+def matrix_operations(A, E_combined, x1_positive, sigma, known):
     """
     Perform matrix operations used in the optimization computation.
 
@@ -26,9 +26,12 @@ def matrix_operations(A, E_combined, x1_positive, sigma):
     tuple: Contains expanded forms of E*x and Sigma*x1 as well as simple E*x for further calculations.
     """
     E_x = torch.matmul(E_combined, x1_positive)
-    E_x_expanded = E_x.unsqueeze(1).expand(-1, A.size(0))
-    E_x_expanded_full = E_x_expanded.repeat(A.size(0) // E_x_expanded.size(0), 1)
-
+    if known:
+        E_x_expanded = E_x.unsqueeze(1).expand(-1, A.size(0))
+        E_x_expanded_full = E_x_expanded.repeat(A.size(0) // E_x_expanded.size(0), 1)
+    else:
+        E_x_expanded = E_x.unsqueeze(1).expand(-1, A.size(1))
+        E_x_expanded_full = E_x_expanded.repeat(A.size(0) // E_x_expanded.size(0), 1)
     sigma_x1 = torch.matmul(sigma, x1_positive)
     return E_x_expanded_full, sigma_x1, E_x
 

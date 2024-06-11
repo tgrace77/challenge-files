@@ -32,7 +32,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
     x2_positive = compute_positive(x2)
     x3_positive = compute_positive(x3)
     x1_diag = torch.diag(x1_positive)
-    E_x_expanded_full, sigma_x1, E_x = matrix_operations(A, E_combined, x1_positive, sigma)
+    E_x_expanded_full, sigma_x1, E_x = matrix_operations(A, E_combined, x1_positive, sigma, known)
     if not known:
       det_approx = compute_determinant_approx(x3_positive)
     else:
