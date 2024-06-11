@@ -56,7 +56,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma):
   x3 = 0
 
   E_combined = E
-  E_transpose = E.t()
+  E_transpose = E.T
 
   optimizer = ooptim.Adam([x1, x2, x3], lr = 0.01)
 
@@ -205,3 +205,4 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
   print(x3)
   
   pass
+
