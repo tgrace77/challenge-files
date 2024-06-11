@@ -26,7 +26,7 @@ def matrix_operations(A, E_combined, x1_positive, sigma):
     tuple: Contains expanded forms of E*x and Sigma*x1 as well as simple E*x for further calculations.
     """
     E_x = torch.matmul(E_combined, x1_positive)
-    print(E_x)
+    E_x.size()
     E_x_expanded = E_x.unsqueeze(1).expand(-1, A.size(0) // E_x.size(0)).reshape(-1)
     E_x_expanded_full = E_x_expanded.repeat(A.size(0) // E_x_expanded.size(0), 1)
     sigma_x1 = torch.matmul(sigma, x1_positive)
