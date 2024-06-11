@@ -15,12 +15,12 @@ import matplotlib.pyplot as plt
 from IPython.display import clear_output
 from utils import *
 
-def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D, known):
+def f(x1_prime, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D, known):
     """
     Defines the loss function for the optimization process.
 
     Args:
-    x1, x2, x3 (torch.Tensor): Parameters to be optimized.
+    x1_prime, x2, x3 (torch.Tensor): Parameters to be optimized.
     A, E_combined, E_transpose, sigma (torch.Tensor): Matrices involved in the loss computation.
     C1, C2, C3, C4, C5, P, L, W (float): Constants defining the specifics of the loss function.
     D (torch.Tensor): Vector D in the optimization context.
@@ -28,6 +28,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
     Returns:
     torch.Tensor: Computed loss value.
     """
+    x1= torch.exp(x1_prime)
     x1_positive = compute_positive(x1)
     x2_positive = compute_positive(x2)
     x3_positive = compute_positive(x3)
@@ -54,7 +55,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
     return (((1 - W) * combined_result) + log_sum_3 + log_sum_4) + ((W * norm_squared_sum) + log_sum_1 + log_sum_2)
 
 def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, known):
-  x1 = torch.randn(x1_size, requires_grad=True)
+  x1_prime = torch.randn(x1_size, requires_grad=True)
   x2 = torch.randn(x1_size)
   x3 = torch.randn(x1_size)
 
@@ -64,16 +65,16 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   A = torch.tensor(A, dtype=torch.float32)
   Sigma = torch.tensor(Sigma, dtype=torch.float32)
   D = torch.tensor(D, dtype=torch.float32)
-  optimizer = optim.Adam([x1], lr=0.001)
+  optimizer = optim.Adam([x1_prime], lr=0.001)
 
   losses = []
   parameter_changes = []
-  previous_parameters = x1.detach().flatten()
+  previous_parameters = x1_prime.detach().flatten()
 
   # Optimization loop
   for i in range(10000):
       optimizer.zero_grad()
-      loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, Sigma, x3, D, known)
+      loss = f(x1_prime, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, Sigma, x3, D, known)
       C1 = 1 / ((i + 1) ** 2)
       loss.backward()
       optimizer.step()
@@ -82,7 +83,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
       losses.append(loss.item())
 
       # Calculate and store parameter changes for x1 only
-      current_parameters = x1.detach().flatten()
+      current_parameters = x1_prime.detach().flatten()
       param_change = torch.log(torch.norm(current_parameters - previous_parameters))
       parameter_changes.append(param_change.item())
       previous_parameters = current_parameters
@@ -108,7 +109,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   plt.show()
   
   print("x1 optimized: ")
-  print(x1)
+  print(x1_prime)
   
   print("x2 optimized: ")
   print(x2) 
