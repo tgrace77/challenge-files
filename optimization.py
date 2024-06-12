@@ -88,8 +88,6 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
       parameter_changes.append(param_change.item())
       previous_parameters = current_parameters
 
-      if i % 100 == 0:
-          print(f"Step {i}, Current loss: {loss.item()}")
       # Plot loss over iterations
   plt.figure(figsize=(12, 5))
   plt.subplot(1, 2, 1)
