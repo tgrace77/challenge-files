@@ -79,8 +79,8 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
       loss.backward()
       optimizer.step()
       
-      # with torch.no_grad():
-      #   x1_prime.clamp_(min=0)
+      with torch.no_grad():
+        x1_prime.clamp_(min=0)
 
       # Store loss
       losses.append(loss.item())
