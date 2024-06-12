@@ -160,7 +160,7 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
 
 
   # Set up the optimizer
-  optimizer = optim.Adam([x1], lr=0.010)
+  optimizer = optim.Adam([x1], lr=0.01)
 
   losses = []
   parameter_changes = []
