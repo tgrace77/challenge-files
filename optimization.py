@@ -110,6 +110,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   
   print("x1 optimized: ")
   print(x1_prime)
+
   
   print("x2 optimized: ")
   print(x2) 
