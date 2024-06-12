@@ -28,8 +28,8 @@ def f(x1_prime, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sig
     Returns:
     torch.Tensor: Computed loss value.
     """
-    x1= torch.exp(x1_prime)
-    x1_positive = compute_positive(x1)
+    #x1 = torch.exp(x1_prime)
+    x1_positive = compute_positive(x1_prime)
     x2_positive = compute_positive(x2)
     x3_positive = compute_positive(x3)
     x1_diag = torch.diag(x1_positive)
@@ -49,7 +49,7 @@ def f(x1_prime, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sig
     # Loss computation
     E_result = torch.matmul(E_combined, x1_diag) @ E_combined.t()
     E_result = E_result.flatten()
-    combined_result = torch.norm((D - sigma_x1 - E_result) + (1 / sum(x1)) * ((E_x.unsqueeze(0).t() * (E_x.unsqueeze(0))).flatten()))**2
+    combined_result = torch.norm((D - sigma_x1 - E_result) + (1 / sum(x1_prime)) * ((E_x.unsqueeze(0).t() * (E_x.unsqueeze(0))).flatten()))**2
     norm_squared_sum = torch.norm(A - E_x_expanded_full, dim=1).pow(2).sum()
 
     return (((1 - W) * combined_result) + log_sum_3 + log_sum_4) + ((W * norm_squared_sum) + log_sum_1 + log_sum_2)
