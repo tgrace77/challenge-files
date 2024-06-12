@@ -139,7 +139,7 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
   E_known = torch.randint(low=0, high=2, size=(E_size, known_column_Esig)).float()
 
   # Unknown Values of Matrix E
-  x2 = torch.randn(100, unknown_column_Esig)
+  x2 = torch.randn(100, unknown_column_Esig, requires_grad=True)
 
   # Matrix E
   E_combined = torch.cat((E_known, x2), dim=1)
@@ -152,7 +152,7 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
   sigma_known = torch.randn(MS_size, known_column_Esig)
 
   # Matrix sigma unknown columns
-  x3 = torch.randn(MS_size, unknown_column_Esig)
+  x3 = torch.randn(MS_size, unknown_column_Esig, requires_grad=True)
 
   # Matrix Sigma
   sigma = torch.cat((sigma_known, x3), dim=1)
@@ -160,25 +160,30 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
 
 
   # Set up the optimizer
-  optimizer = optim.Adam([x1], lr=0.01)
+  optimizer = optim.Adam([x1, x2, x3], lr=0.01)
 
   losses = []
   parameter_changes = []
-  previous_parameters = x1_prime.detach().flatten()
+  previous_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
 
-  for i in range(10000):
+  # Optimization loop
+  for i in range(1000):
       optimizer.zero_grad()
-      loss = f(x1_prime, A, E_combined, E_transpose, C1, C2, C3, C4, C5, P, L, W, Sigma, D, known)
-      C1 = 1 / ((i + 1) ** 2)
+      loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D, known)
       loss.backward()
       optimizer.step()
 
+      # Store loss
       losses.append(loss.item())
-      current_parameters = x1_prime.detach().flatten()
+
+      # Calculate and store parameter changes
+      current_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
       param_change = torch.log(torch.norm(current_parameters - previous_parameters))
       parameter_changes.append(param_change.item())
       previous_parameters = current_parameters
 
+      if i % 10 == 0:
+          print(f"Step {i}, Current loss: {loss.item()}")
 
   # Plot loss over iterations
   plt.figure(figsize=(12, 5))
