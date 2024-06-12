@@ -65,7 +65,7 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   A = torch.tensor(A, dtype=torch.float32)
   Sigma = torch.tensor(Sigma, dtype=torch.float32)
   D = torch.tensor(D, dtype=torch.float32)
-  optimizer = optim.Adam([x1_prime], lr=0.001)
+  optimizer = optim.Adam([x1_prime], lr=0.01)
 
   losses = []
   parameter_changes = []
