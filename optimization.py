@@ -121,6 +121,8 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   
   pass
 
+
+
 def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_Esig, x1_size, A_column, A_row, D_size, E_size, MS_size, known):
   """
   Performs the gradient descent optimization over specified parameters and hyperparameters.

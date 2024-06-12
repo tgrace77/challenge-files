@@ -3,9 +3,15 @@ import numpy as np
 import cvxpy as cp
 import math
 import torch
+from scipy.linalg import sqrtm
 #import gurobipy
 #import mosek
 
+def avg(array):
+    return sum(array)/len(array)
+
+def first_moment_objective(cluster_avg_expressions, bulk_gene_expressions, unnormalized_ratios):
+    return np.sum(np.square((bulk_gene_expressions - unnormalized_ratios@cluster_avg_expressions)))/np.sum(np.square(bulk_gene_expressions))
 
 def bento_cvxpy_first_moment_only_with_normalization_and_preconditioning(cluster_avg_expressions, bulk_gene_expressions, solver = cp.OSQP, verbose = False, normalization_term = 'l2_norm_of_bulk', preconditioning = 'none'):
     if normalization_term == 'l2_norm_of_bulk':
@@ -38,13 +44,16 @@ cp.sum_squares(np.ones((len(bulk_gene_expressions),1))@x@cluster_avg_expressions
     prob = cp.Problem(objective, constraint)
         
     result = prob.solve(solver = solver, verbose = verbose)
-    if preconditioning == 'none':
-        X = (x.value[0]).flatten()
+    if (x.value is None):
+        return None, None, None
     else:
-        X = (x.value[0]@P).flatten()
-    N = sum(X)
-    alpha = X/N
-    return alpha, N, result
+        if preconditioning == 'none':
+            X = (x.value[0]).flatten()
+        else:
+            X = (x.value[0]@P).flatten()
+        N = sum(X)
+        alpha = X/N
+        return alpha, N, result
 
 class AlphaCovModel(torch.nn.Module):
     def __init__(self, n_clusters, use_projected_gradient=True, vectorize = True):
@@ -321,27 +330,50 @@ def covariance_objective(cluster_avg_expressions, bulk_gene_expressions, cluster
 """if you have n_samples bulk samples with n_genes for one problem, 
 bulk_gene_expressions should be a n_samples x n_genes matrix"""
 
-def bento_plain(cluster_avg_expressions, bulk_gene_expressions, solver = cp.SCS):
+def bento_plain(cluster_avg_expressions, bulk_gene_expressions, preconditioning, solver = cp.SCS):
     C = np.sum(np.square(bulk_gene_expressions)) #constant for normalization in the cvxpy objective function
     
     
     #cvxpy routine start
     x = cp.Variable((1,len(cluster_avg_expressions)), nonneg = True) #xi = number of cells in cluster i
     
+    P, cluster_avg_expressions, x, constraint = get_precondition(preconditioning, cluster_avg_expressions)
+
     objective = cp.Minimize(\
 cp.sum_squares(np.ones((len(bulk_gene_expressions),1))@x@cluster_avg_expressions-np.array(bulk_gene_expressions))/C)
     
-    prob = cp.Problem(objective)
+    prob = cp.Problem(objective, constraint)
         
     result = prob.solve(solver = solver)
     #cvxpy routine end
+
     if (x.value is None):
         return None, None, None
     else:
-        N = sum(x.value[0])
-        alpha = x.value[0]/N
+        if preconditioning == 'none':
+            X = (x.value[0]).flatten()
+        else:
+            X = (x.value[0]@P).flatten()
+        N = sum(X)
+        alpha = X/N
         return alpha, N, result
 
+def get_precondition(preconditioning, cluster_avg_expressions):
+    if preconditioning == 'diagonal':
+        P = np.diag(np.diagonal(sqrtm(cluster_avg_expressions@cluster_avg_expressions.T)))
+        cluster_avg_expressions = P@cluster_avg_expressions
+        x = cp.Variable((1,len(cluster_avg_expressions)), nonneg = True)
+        constraint = [x >= 0]
+    elif preconditioning == 'none':
+        P = np.eye(len(cluster_avg_expressions))
+        x = cp.Variable((1,len(cluster_avg_expressions)), nonneg = True)
+        constraint = [x >= 0]
+    elif preconditioning == 'exact':
+        P = sqrtm(cluster_avg_expressions@cluster_avg_expressions.T)
+        cluster_avg_expressions = P@cluster_avg_expressions
+        x = cp.Variable((1,len(cluster_avg_expressions)))
+        constraint = [x@P >= 0]
+    return P, cluster_avg_expressions, x, constraint
 
 def KL_objective(cluster_avg_expressions, bulk_gene_expressions, flat_cluster_covs, bulk_cov, weight, solver = cp.SCS):
     
@@ -512,5 +544,3 @@ def missing_prototype(num_missing_cluster_refs, cluster_avg_expressions, bulk_ge
                 Ns[i] = N
                 alpha_results[i] = alpha_result
                 R_results[i] = R_result
-
-
