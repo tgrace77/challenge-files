@@ -160,30 +160,29 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
 
 
   # Set up the optimizer
-  optimizer = optim.Adam([x1, x2, x3], lr=0.01)
+  optimizer = optim.Adam([x1], lr=0.010)
 
   losses = []
   parameter_changes = []
-  previous_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
+  previous_parameters = x1_prime.detach().flatten()
 
-  # Optimization loop
-  for i in range(1000):
+  for i in range(10000):
       optimizer.zero_grad()
-      loss = f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D, known)
+      loss = f(x1_prime, A, E_combined, E_transpose, C1, C2, C3, C4, C5, P, L, W, Sigma, D, known)
+      C1 = 1 / ((i + 1) ** 2)
       loss.backward()
       optimizer.step()
 
-      # Store loss
       losses.append(loss.item())
-
-      # Calculate and store parameter changes
-      current_parameters = torch.cat((x1.detach().flatten(), x2.detach().flatten(), x3.detach().flatten()))
+      current_parameters = x1_prime.detach().flatten()
       param_change = torch.log(torch.norm(current_parameters - previous_parameters))
       parameter_changes.append(param_change.item())
       previous_parameters = current_parameters
 
-      if i % 10 == 0:
+      if i % 100 == 0:
           print(f"Step {i}, Current loss: {loss.item()}")
+
+
 
   # Plot loss over iterations
   plt.figure(figsize=(12, 5))
