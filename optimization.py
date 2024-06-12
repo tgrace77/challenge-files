@@ -139,7 +139,7 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
   E_known = torch.randint(low=0, high=2, size=(E_size, known_column_Esig)).float()
 
   # Unknown Values of Matrix E
-  x2 = torch.randn(100, unknown_column_Esig, requires_grad=True)
+  x2 = torch.randn(100, unknown_column_Esig)
 
   # Matrix E
   E_combined = torch.cat((E_known, x2), dim=1)
@@ -152,7 +152,7 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
   sigma_known = torch.randn(MS_size, known_column_Esig)
 
   # Matrix sigma unknown columns
-  x3 = torch.randn(MS_size, unknown_column_Esig, requires_grad=True)
+  x3 = torch.randn(MS_size, unknown_column_Esig)
 
   # Matrix Sigma
   sigma = torch.cat((sigma_known, x3), dim=1)
@@ -178,10 +178,6 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
       param_change = torch.log(torch.norm(current_parameters - previous_parameters))
       parameter_changes.append(param_change.item())
       previous_parameters = current_parameters
-
-      if i % 100 == 0:
-          print(f"Step {i}, Current loss: {loss.item()}")
-
 
 
   # Plot loss over iterations
