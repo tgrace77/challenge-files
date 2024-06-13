@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-from utils import *
+from optimization import *
 
 # Function to calculate the L1 norm error
 def plot_errors(i_values, W_values, num_samples, C1, x1_size, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs):

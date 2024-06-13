@@ -10,7 +10,6 @@ Original file is located at
 #Utility Functions
 
 import torch
-from optimization import *
 from tqdm import tqdm
 
 def matrix_operations(A, E_combined, x1_positive, sigma, known):
@@ -53,32 +52,4 @@ def compute_determinant_approx(x):
 def compute_positive(x):
     return torch.nn.functional.softplus(x)
 
-def calculate_errors(i, W, num_samples,  C1, x1_size, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs):
-    A = A_list[i]
-    A = A.T.flatten()
-    D = D_list[i]
-    ground_truth_frac = ground_truth_fracs[i]
-    A_jacob = A.reshape((10,50))
 
-    D_jacob = D.T
-    E_jacob = E.T
-    Sigma_jacob = Sigma.T
-
-    teddy_errors = []
-    jacob_errors = []
-
-    for _ in tqdm(range(num_samples), desc=f"i = {i}, W = {W}"):
-        x1 = grad_descent_known(C1, C2=0, C3=0, C4=0, C5=0, P=0, L=0, W=W, x1_size=x1_size, A=A, D=D, E=E, Sigma=Sigma, known=known)
-        jacob_results = pytorch_cov_prediction(A_jacob, E_jacob, D_jacob, Sigma_jacob, W, 1, 1, num_epochs=num_epochs)
-        
-        x1 = x1.squeeze()
-        teddy_alpha = x1 / sum(x1)
-        jacob_alpha = jacob_results[0]
-
-        ted_error = L1_norm(teddy_alpha, ground_truth_frac)
-        jacob_error = L1_norm(jacob_alpha, ground_truth_frac)
-        
-        teddy_errors.append(ted_error)
-        jacob_errors.append(jacob_error)
-    
-    return np.mean(teddy_errors), np.std(teddy_errors), np.mean(jacob_errors), np.std(jacob_errors)
