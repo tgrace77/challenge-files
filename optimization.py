@@ -55,10 +55,10 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
 
     return (((1 - W) * combined_result) + log_sum_3 + log_sum_4) + ((W * norm_squared_sum) + log_sum_1 + log_sum_2)
 
-def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, known):
-  x1 = torch.randn(x1_size, requires_grad=True)
-  x2 = torch.randn(x1_size)
-  x3 = torch.randn(x1_size)
+def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1, x2, x3, A, D, E, Sigma, known):
+  #x1 = torch.randn(x1_size, requires_grad=True)
+  #x2 = torch.randn(x1_size)
+  #x3 = torch.randn(x1_size)
 
   E_combined = torch.tensor(E, dtype=torch.float32)
   E_transpose = E_combined.t()
@@ -233,7 +233,7 @@ def calculate_errors(i, W, num_samples,  C1, x1_size, A_list, D_list, E, Sigma, 
     jacob_errors = []
 
     for _ in tqdm(range(num_samples), desc=f"i = {i}, W = {W}"):
-        x1 = grad_descent_known(C1, C2=0, C3=0, C4=0, C5=0, P=0, L=0, W=W, x1_size=x1_size, A=A, D=D, E=E, Sigma=Sigma, known=known)
+        x1 = grad_descent_known(C1, C2=0, C3=0, C4=0, C5=0, P=0, L=0, W=W, x1 = x1, x2 = x2, x3 = x3, A=A, D=D, E=E, Sigma=Sigma, known=known)
         jacob_results = pytorch_cov_prediction(A_jacob, E_jacob, D_jacob, Sigma_jacob, W, 1, 1, num_epochs=num_epochs)
         
         x1 = x1.squeeze()
