@@ -218,7 +218,7 @@ def grad_descent(C1, C2, C3, C4, C5, P, L, W, known_column_Esig, unknown_column_
 
 
 
-def calculate_errors(i, W, num_samples,  C1, x1_size, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs):
+def calculate_errors(i, W, num_samples,  C1, x1, x2, x3, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs):
     A = A_list[i]
     A = A.T.flatten()
     D = D_list[i]
