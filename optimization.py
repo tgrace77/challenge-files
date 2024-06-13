@@ -247,3 +247,6 @@ def calculate_errors(i, W, num_samples,  C1, x1_size, A_list, D_list, E, Sigma, 
         jacob_errors.append(jacob_error)
     
     return np.mean(teddy_errors), np.std(teddy_errors), np.mean(jacob_errors), np.std(jacob_errors)
+
+
+      
