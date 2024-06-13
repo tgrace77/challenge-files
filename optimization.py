@@ -14,6 +14,7 @@ import torch.optim as optim
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 from utils import *
+from cvxpy_prediction_algorithm_codebase import *
 
 def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D, known):
     """
@@ -89,32 +90,32 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
       parameter_changes.append(param_change.item())
       previous_parameters = current_parameters
 
-      # Plot loss over iterations
-  plt.figure(figsize=(12, 5))
-  plt.subplot(1, 2, 1)
-  plt.plot(losses, label='Loss')
-  plt.title('Loss Function over Iterations')
-  plt.xlabel('Iteration')
-  plt.ylabel('Loss')
-  plt.legend()
+  #     # Plot loss over iterations
+  # plt.figure(figsize=(12, 5))
+  # plt.subplot(1, 2, 1)
+  # plt.plot(losses, label='Loss')
+  # plt.title('Loss Function over Iterations')
+  # plt.xlabel('Iteration')
+  # plt.ylabel('Loss')
+  # plt.legend()
 
-  # Plot parameter changes
-  plt.subplot(1, 2, 2)
-  plt.plot(parameter_changes, label='Log of Parameter Changes')
-  plt.title('Log of Norm of Parameter Changes')
-  plt.xlabel('Iteration')
-  plt.ylabel('Log(Norm of Changes)')
-  plt.legend()
-  plt.show()
+  # # Plot parameter changes
+  # plt.subplot(1, 2, 2)
+  # plt.plot(parameter_changes, label='Log of Parameter Changes')
+  # plt.title('Log of Norm of Parameter Changes')
+  # plt.xlabel('Iteration')
+  # plt.ylabel('Log(Norm of Changes)')
+  # plt.legend()
+  # plt.show()
   
-  print("x1 optimized: ")
-  print(x1)
+  # print("x1 optimized: ")
+  # print(x1)
   
-  print("x2 optimized: ")
-  print(x2) 
+  # print("x2 optimized: ")
+  # print(x2) 
   
-  print("x3 optimized: ")
-  print(x3)
+  # print("x3 optimized: ")
+  # print(x3)
 
   return x1
   
