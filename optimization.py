@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 from IPython.display import clear_output
 from utils import *
 from cvxpy_prediction_algorithm_codebase import *
+from metrics_and_plots_codebase import L1_norm
 
 def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3, D, known):
     """
