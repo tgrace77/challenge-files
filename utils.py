@@ -52,7 +52,7 @@ def compute_determinant_approx(x):
 def compute_positive(x):
     return torch.nn.functional.softplus(x)
 
-def calculate_errors(i, W, num_samples,  C1, x1_size, A, D, E, Sigma, known, num_epochs, A_jacob, E_jacob, D_jacob, Sigma_jacob):
+def calculate_errors(i, W, num_samples,  C1, x1_size, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs):
     A = A_list[i]
     A = A.T.flatten()
     D = D_list[i]
