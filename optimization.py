@@ -56,6 +56,7 @@ def f(x1, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sigma, x3
     return (((1 - W) * combined_result) + log_sum_3 + log_sum_4) + ((W * norm_squared_sum) + log_sum_1 + log_sum_2)
 
 def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1, x2, x3, A, D, E, Sigma, known):
+  print(x1)
   #x1 = torch.randn(x1_size, requires_grad=True)
   #x2 = torch.randn(x1_size)
   #x3 = torch.randn(x1_size)
