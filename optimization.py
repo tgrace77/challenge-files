@@ -29,7 +29,7 @@ def f(x1_prime, A, E_combined, E_transpose, x2, C1, C2, C3, C4, C5, P, L, W, sig
     torch.Tensor: Computed loss value.
     """
     #x1 = torch.exp(x1_prime)
-    x1_positive = compute_positive(x1)
+    x1_positive = compute_positive(x1_prime)
     x2_positive = compute_positive(x2)
     x3_positive = compute_positive(x3)
     x1_diag = torch.diag(x1_positive)
