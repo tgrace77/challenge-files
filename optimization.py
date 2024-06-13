@@ -115,6 +115,8 @@ def grad_descent_known(C1, C2, C3, C4, C5, P, L, W, x1_size, A, D, E, Sigma, kno
   
   print("x3 optimized: ")
   print(x3)
+
+  return x1
   
   pass
 
