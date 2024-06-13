@@ -13,7 +13,7 @@ def plot_errors(i_values, W_values, num_samples, C1, x1, x2, x3, A_list, D_list,
         jacob_errors_stds = []
         
         for W in W_values:
-            mean_teddy, std_teddy, mean_jacob, std_jacob = calculate_errors(i, W, num_samples,  C1, x1, x2, x3, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs)
+            mean_teddy, std_teddy, mean_jacob, std_jacob = calculate_errors(i, W, num_samples, C1, x1, x2, x3, A_list, D_list, E, Sigma, ground_truth_fracs, known, num_epochs)
             teddy_errors_means.append(mean_teddy)
             teddy_errors_stds.append(std_teddy)
             jacob_errors_means.append(mean_jacob)
