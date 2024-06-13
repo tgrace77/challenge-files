@@ -235,8 +235,8 @@ def calculate_errors(i, W, num_samples,  C1, x1, x2, x3, A_list, D_list, E, Sigm
         jacob_results = pytorch_cov_prediction(A_jacob, E_jacob, D_jacob, Sigma_jacob, W, 1, 1, num_epochs=num_epochs)
         
         x1 = x1.squeeze()
-        teddy_alpha = x1 / sum(x1)
-        jacob_alpha = jacob_results[0]
+        teddy_alpha = x1.detach().numpy() / sum(x1.detach().numpy())
+        jacob_alpha = jacob_results[0].detatch().numpy()
 
         ted_error = L1_norm(teddy_alpha, ground_truth_frac)
         jacob_error = L1_norm(jacob_alpha, ground_truth_frac)
@@ -244,7 +244,7 @@ def calculate_errors(i, W, num_samples,  C1, x1, x2, x3, A_list, D_list, E, Sigm
         teddy_errors.append(ted_error)
         jacob_errors.append(jacob_error)
     
-    return torch.mean(teddy_errors), torch.std(teddy_errors), torch.mean(jacob_errors), torch.std(jacob_errors)
+    return np.mean(teddy_errors), np.std(teddy_errors), np.mean(jacob_errors), np.std(jacob_errors)
 
 
       
