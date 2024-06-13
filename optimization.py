@@ -244,7 +244,7 @@ def calculate_errors(i, W, num_samples,  C1, x1, x2, x3, A_list, D_list, E, Sigm
         teddy_errors.append(ted_error)
         jacob_errors.append(jacob_error)
     
-    return np.mean(teddy_errors), np.std(teddy_errors), np.mean(jacob_errors), np.std(jacob_errors)
+    return torch.mean(teddy_errors), torch.std(teddy_errors), torch.mean(jacob_errors), torch.std(jacob_errors)
 
 
       
