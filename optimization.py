@@ -236,7 +236,7 @@ def calculate_errors(i, W, num_samples,  C1, x1, x2, x3, A_list, D_list, E, Sigm
         
         x1 = x1.squeeze()
         teddy_alpha = x1.detach().numpy() / sum(x1.detach().numpy())
-        jacob_alpha = jacob_results[0].detatch().numpy()
+        jacob_alpha = jacob_results[0].detach().numpy()
 
         ted_error = L1_norm(teddy_alpha, ground_truth_frac)
         jacob_error = L1_norm(jacob_alpha, ground_truth_frac)
