@@ -11,6 +11,7 @@ Original file is located at
 
 import torch
 from optimization import *
+from tqdm import tqdm
 
 def matrix_operations(A, E_combined, x1_positive, sigma, known):
     """
